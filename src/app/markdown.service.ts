@@ -49,7 +49,7 @@ export class MarkdownService {
   }
 
   getContent(content: any[]): string {
-    return ' content: any[] = [\n' + content.map(data => '  ' + JSON.stringify(data).replace(/"([^"]+)":/g, '$1:').split('"').join('\'')).join(', \n') + '\n];\n';
+    return ' content: any[] = [\n' + content.map(data => '  ' + JSON.stringify(data).replace(/"([^"]+)":/g, '$1:')).join(', \n') + '\n];\n';
   }
 
   getMethod(): string {
