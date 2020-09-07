@@ -1,0 +1,148 @@
+<app-msg-notification [msgNotification]="copiedToClipboardMsg"></app-msg-notification>
+
+<mat-accordion>
+
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title style="font-weight: bolder">
+        ADD JSON
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <textarea placeholder="Copy JSON here" style="width: 100%; height: 100px" (keyup)="parseJSON($event.target.value)"></textarea>
+    <br>
+
+    <div style="color: red; text-align: center">{{jsonParseErr}}</div>
+    <br>
+
+  </mat-expansion-panel>
+
+  <mat-expansion-panel #configurationPanel [style.height]="(!tableConfig || jsonParseErr) ? '0px' : null">
+    <mat-expansion-panel-header>
+      <mat-panel-title style="font-weight: bolder">
+        CONFIGURE TABLE
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div style="text-align: center">
+      <button mat-raised-button (click)="configurationFiles.open()" style="background-color: #2d257d; color: white;">GENERATE CODE</button>
+    </div>
+
+    <div *ngIf="tableConfig && !jsonParseErr">
+      <lib-view-table
+        [config]="tableConfig"
+        [content]="content">
+      </lib-view-table>
+    </div>
+    <br>
+
+    <div cdkDropListGroup *ngIf="tableConfig && !jsonParseErr" class="configSection">
+
+      <div class="example-container">
+        <h2 style="text-align: center; width: 100%; color: #929292;">Drag columns to change order</h2>
+        <div cdkDropList class="example-list" [cdkDropListData]="tableConfig.data" (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let data of tableConfig.data; index as i" cdkDrag>
+            <div class="itemTitle">
+              <h4 style="margin: 5px;">{{data.columnTitle}}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-container">
+        <h2 style="text-align: center; width: 100%; color: #929292;">Drag columns here to remove</h2>
+        <div cdkDropList class="example-list" [cdkDropListData]="removedColumnData" (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let data of removedColumnData" cdkDrag>
+            <div class="itemTitle">
+              <h4 style="color: red; margin: 5px;">{{data.columnTitle}}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-container">
+        <h2 style="text-align: center; width: 100%; color: #929292;">Edit Columns</h2>
+        <div *ngFor="let data of tableConfig.data; index as i" class="editable-column-container">
+          <textarea style="flex: 3;" (keyup)="setColumnTitle(data, $event)">{{data.columnTitle}}</textarea>
+          <mat-button-toggle-group *ngIf="isBoolean(content[0][data.objectAttribute])" style="flex: 1;" [value]="true" (change)="tableConfig.data[i].displayBooleanAsIcon = $event.value">
+            <mat-button-toggle [value]="true">Icon</mat-button-toggle>
+            <mat-button-toggle [value]="false">No Icon</mat-button-toggle>
+          </mat-button-toggle-group>
+          <mat-button-toggle-group *ngIf="configService.isValidColor(configService.retrieveValue(content[0], data.objectAttribute))" style="flex: 1;" [value]="true" (change)="tableConfig.data[i].displayAsColour = $event.value">
+            <mat-button-toggle [value]="true">Colour</mat-button-toggle>
+            <mat-button-toggle [value]="false">No Colour</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+
+      <div class="example-container">
+        <h2 style="text-align: center; width: 100%; color: #929292;">Table Options</h2>
+        <div style="text-align: center">
+
+          <div>
+            <h4 style="margin: 5px">Default Sort By Column</h4>
+            <app-auto-complete-search
+              [hidden]="!tableConfig.data.length"
+              [idTag]="'sort_by_column'"
+              [formFieldTitle]="'Sort By Column'"
+              [placeHolderText]="'Type a column name to sort by'"
+              [data]="tableConfig.data"
+              [displayField]="'columnTitle'"
+              [selectData]="selectedSortByCol"
+              (validSelectionValueChange)="setSortByColumn($event)">
+            </app-auto-complete-search>
+          </div>
+
+          <div style="text-align: center" *ngIf="selectedSortByCol">
+            <h4 style="margin: 5px">Sort Direction</h4>
+            <mat-button-toggle-group [value]="tableConfig.sortDir" (change)="setSortDirection($event.value)">
+              <mat-button-toggle [value]="'asc'">Asc</mat-button-toggle>
+              <mat-button-toggle [value]="'desc'">Desc</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+          <br>
+          <div>
+            <h4 style="margin: 5px">Row Hover</h4>
+            <mat-button-toggle-group [value]="true" (change)="tableConfig.rowHover = $event.value">
+              <mat-button-toggle [value]="true">On</mat-button-toggle>
+              <mat-button-toggle [value]="false">Off</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </mat-expansion-panel>
+
+  <mat-expansion-panel #configurationFiles [style.height]="(!tableConfig || jsonParseErr) ? '0px' : null">
+    <mat-expansion-panel-header>
+      <mat-panel-title style="font-weight: bolder">
+        GENERATE CODE
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <app-npm-install (copiedToClipboard)="showCopiedToClipboardMsg()"></app-npm-install>
+
+    <br>
+
+    <mat-tab-group mat-align-tabs="center" *ngIf="tableConfig">
+      <mat-tab label="index.html">
+        <markdown [data]="markdownService.indexHTMLCode"></markdown>
+      </mat-tab>
+      <mat-tab label="app.component.html">
+        <markdown [data]="markdownService.appComponentHTMLCode"></markdown>
+      </mat-tab>
+      <mat-tab label="app.component.ts">
+        <markdown [data]="markdownService.getAppComponentCode(tableConfig, content)"></markdown>
+      </mat-tab>
+      <mat-tab label="app.module.ts">
+        <markdown [data]="markdownService.getAppModuleCode()"></markdown>
+      </mat-tab>
+    </mat-tab-group>
+
+  </mat-expansion-panel>
+
+</mat-accordion>

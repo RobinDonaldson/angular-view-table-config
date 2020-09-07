@@ -1,0 +1,40 @@
+.npmInstall {
+  line-height: 1.5;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  padding: 10px;
+  max-width: 350px;
+  margin: 0 auto;
+}
+.npmInstall:hover {
+  color: #2d257d;
+  background-color: #DBFFDB;
+  border-color: #00C642;
+  cursor: pointer;
+}
+
+.npmInstall:hover #copy-icon {
+  right: 15px;
+  left: auto;
+  opacity: 1;
+  fill: rgba(0, 0, 0, .5);
+  transition: opacity 0.2s linear;
+}
+
+svg {
+  top: 11px;
+  left: 18px;
+  width: 0.9em;
+  height: 0.9em;
+  flex: none;
+  margin-right: 3px;
+  margin-left: 0;
+  margin-top: 6px;
+  fill: rgba(0, 0, 0, .5);
+  transform: translateY(2px);
+}
+
+#copy-icon {
+  opacity: 0;
+  float: right;
+}

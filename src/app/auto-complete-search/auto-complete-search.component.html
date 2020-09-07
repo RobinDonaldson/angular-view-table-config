@@ -1,0 +1,32 @@
+<form [formGroup]="searchForm">
+
+  <mat-form-field class="dataFormField" (click)="setSearchText('')">
+    <mat-label [id]="idTag + SEARCH + '_title'">{{formFieldTitle}}</mat-label>
+    <input #searchInput
+           [id]="idTag + SEARCH"
+           [formControlName]="SEARCH"
+           [placeholder]="placeHolderText"
+           [matAutocomplete]="auto"
+           matInput>
+    <mat-autocomplete #auto="matAutocomplete">
+      <cdk-virtual-scroll-viewport itemSize="48" minBufferPx="480" maxBufferPx="4800" [style.height.px]="filteredDataSetCnt > 5 ? 240 : filteredDataSetCnt * 48">
+        <mat-option *cdkVirtualFor="let data of filteredData | async" [value]="data[displayField]" (click)="searchInput.blur()">
+          <span>{{data[displayField]}}</span>
+        </mat-option>
+      </cdk-virtual-scroll-viewport>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <span class="addDataBtnDiv" *ngIf="addBtnOption">
+              <button [id]="idTag + 'add_btn'"
+                      [disabled]="!selectedData"
+                      (click)="addData()"
+                      mat-mini-fab
+                      class="addDataBtn">
+                  <mat-icon class="matIconAdd">
+                    add_icon
+                  </mat-icon>
+              </button>
+  </span>
+
+</form>
