@@ -128,7 +128,7 @@
 
     <br>
 
-    <mat-tab-group mat-align-tabs="center" *ngIf="tableConfig">
+    <mat-tab-group mat-align-tabs="center" *ngIf="tableConfig" style="max-height: 650px!important;">
       <mat-tab label="index.html">
         <markdown [data]="markdownService.indexHTMLCode"></markdown>
       </mat-tab>
