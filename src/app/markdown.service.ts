@@ -22,23 +22,10 @@ export class MarkdownService {
 
   getAppComponentCode(tableConfig: TableConfig, content: any[]): string {
     return '```typescript\n' +
-      this.getMainAppCode() +
       this.getTableConfig(tableConfig) + '\n' +
       this.getContent(content) + '\n' +
-      this.getMethod() + '\n\n}\n' +
+      this.getMethod() + '\n' +
       '```';
-  }
-
-  getMainAppCode(): string {
-    return 'import {Component} from \'@angular/core\';\n' +
-      'import {TableConfig} from \'view-table\';\n' +
-      '\n' +
-      '@Component({\n' +
-      '  selector: \'app-root\',\n' +
-      '  templateUrl: \'./app.component.html\',\n' +
-      '  styleUrls: [ \'./app.component.css\' ]\n' +
-      '})\n' +
-      'export class AppComponent  {' + '\n\n';
   }
 
   getTableConfig(tableConfig: TableConfig): string {
