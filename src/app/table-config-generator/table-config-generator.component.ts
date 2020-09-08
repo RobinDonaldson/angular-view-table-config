@@ -99,5 +99,5 @@ export interface TableData {
     objectAttribute: string;
     dateFormat?: string;
     displayAsColour?: boolean;
-    displayBooleanAsIcon?: boolean;
+    displayAsIcon?: boolean;
 }

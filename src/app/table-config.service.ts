@@ -15,7 +15,7 @@ export class TableConfigService {
     const DATA = VALID_KEYS.map(key => ({
       columnTitle: this.getColumnName(key.field),
       objectAttribute: key.field,
-      displayBooleanAsIcon: key.type === 'boolean',
+      displayAsIcon: key.type === 'boolean',
       displayAsColour: this.isValidColor(this.retrieveValue(content[0], key.field))
     }));
 

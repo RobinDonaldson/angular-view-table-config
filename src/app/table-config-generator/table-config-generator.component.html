@@ -9,7 +9,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <textarea placeholder="Copy JSON here" style="width: 100%; height: 100px" (keyup)="parseJSON($event.target.value)"></textarea>
+    <textarea placeholder="Copy JSON here" style="width: 100%; height: 100px" (keyup)="parseJSON($event.target.value)">{{testData}}</textarea>
     <br>
 
     <div style="color: red; text-align: center">{{jsonParseErr}}</div>
@@ -64,7 +64,7 @@
         <h2 style="text-align: center; width: 100%; color: #929292;">Edit Columns</h2>
         <div *ngFor="let data of tableConfig.data; index as i" class="editable-column-container">
           <textarea style="flex: 3;" (keyup)="setColumnTitle(data, $event)">{{data.columnTitle}}</textarea>
-          <mat-button-toggle-group *ngIf="isBoolean(content[0][data.objectAttribute])" style="flex: 1;" [value]="true" (change)="tableConfig.data[i].displayBooleanAsIcon = $event.value">
+          <mat-button-toggle-group *ngIf="isBoolean(content[0][data.objectAttribute])" style="flex: 1;" [value]="true" (change)="tableConfig.data[i].displayAsIcon = $event.value">
             <mat-button-toggle [value]="true">Icon</mat-button-toggle>
             <mat-button-toggle [value]="false">No Icon</mat-button-toggle>
           </mat-button-toggle-group>
@@ -129,9 +129,6 @@
     <br>
 
     <mat-tab-group mat-align-tabs="center" *ngIf="tableConfig" style="max-height: 650px!important;">
-      <mat-tab label="index.html">
-        <markdown [data]="markdownService.indexHTMLCode"></markdown>
-      </mat-tab>
       <mat-tab label="app.component.html">
         <markdown [data]="markdownService.appComponentHTMLCode"></markdown>
       </mat-tab>

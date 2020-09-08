@@ -55,11 +55,10 @@ import 'prismjs/plugins/line-highlight/prism-line-highlight.js';
     MatAutocompleteModule,
     ScrollingModule,
     MatInputModule,
-    MatIconModule,
     MatExpansionModule,
     ClipboardModule,
     MatTabsModule,
-    MarkdownModule.forRoot(),
+    MarkdownModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

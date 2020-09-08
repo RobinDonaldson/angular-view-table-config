@@ -43,7 +43,7 @@ export class MarkdownService {
     return tableConfig.data.map(data => {
       let colInfo = '     {columnTitle: \'' + data.columnTitle + '\', objectAttribute: \'' + data.objectAttribute + '\'';
       colInfo += (data.displayAsColour ? ', displayAsColour: ' + data.displayAsColour : '');
-      colInfo += (data.displayBooleanAsIcon ? ', displayBooleanAsIcon: ' + data.displayBooleanAsIcon : '');
+      colInfo += (data.displayAsIcon ? ', displayAsIcon: ' + data.displayAsIcon : '');
       return colInfo + '}';
     }).join(', \n') + '\n  ],\n';
   }
