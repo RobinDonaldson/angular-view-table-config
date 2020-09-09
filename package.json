@@ -29,7 +29,7 @@
     "prismjs": "^1.21.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
-    "view-table": "^0.1.4",
+    "view-table": "^0.1.5",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
