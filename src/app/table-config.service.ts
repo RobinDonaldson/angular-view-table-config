@@ -16,13 +16,16 @@ export class TableConfigService {
       columnTitle: this.getColumnName(key.field),
       objectAttribute: key.field,
       displayAsIcon: key.type === 'boolean',
-      displayAsColour: this.isValidColor(this.retrieveValue(content[0], key.field))
+      displayAsColour: this.isValidColor(this.retrieveValue(content[0], key.field)),
+      dateFormat: (this.isValidDate(this.retrieveValue(content[0], key.field)) ? 'dd-MMM-yyyy' : undefined)
     }));
 
     return {
       data: DATA,
       rowHover: true,
-      sortByColumn: VALID_KEYS[0].field,
+      search: true,
+      sorting: true,
+      sortByAttribute: VALID_KEYS[0].field,
       sortDir: 'asc',
       idTag: 'table',
       locale: 'en-UK'
@@ -106,6 +109,16 @@ export class TableConfigService {
 
   public isValidColor(value): boolean {
     return (/^#[0-9A-F]{6}$/i.test(value) || /^#([0-9A-F]{3}){1,2}$/i.test(value) || this.isColor(value));
+  }
+
+  public isValidDate(value): boolean {
+    if (isNaN(Date.parse(value))) {
+      return false;
+    } else {
+      const DATE: Date = new Date(Date.parse(value));
+      const IS_VALID = (value.toString().includes(DATE.getDate().toString()) && value.toString().includes(DATE.getFullYear().toString()));
+      return IS_VALID;
+    }
   }
 
   public retrieveValue(obj, path): any {

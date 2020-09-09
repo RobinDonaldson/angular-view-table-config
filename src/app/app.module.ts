@@ -13,7 +13,6 @@ import {CommonModule} from '@angular/common';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {AutoCompleteSearchComponent} from './auto-complete-search/auto-complete-search.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -33,7 +32,6 @@ import 'prismjs/plugins/line-highlight/prism-line-highlight.js';
 @NgModule({
   declarations: [
     AppComponent,
-    AutoCompleteSearchComponent,
     TableConfigGeneratorComponent,
     NpmInstallComponent,
     MsgNotificationComponent

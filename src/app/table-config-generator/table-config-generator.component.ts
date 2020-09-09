@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {TableConfig} from 'view-table';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {SortDirection} from '@angular/material/sort';
+import {MatSort} from '@angular/material/sort';
 import {MatExpansionPanel} from '@angular/material/expansion';
 import {MsgNotification} from '../msg-notification/msg-notification.component';
 import {MarkdownService} from '../markdown.service';
@@ -20,7 +20,6 @@ export class TableConfigGeneratorComponent {
 
   tableConfig: TableConfig;
   removedColumnData: TableData[] = [];
-  selectedSortByCol: TableData;
   content;
   jsonParseErr;
   copiedToClipboardMsg: MsgNotification;
@@ -32,7 +31,6 @@ export class TableConfigGeneratorComponent {
   reset(): void {
     this.removedColumnData = [];
     this.content = [];
-    this.selectedSortByCol = null;
   }
 
   parseJSON(value): void {
@@ -44,7 +42,6 @@ export class TableConfigGeneratorComponent {
         this.configurationPanel.open();
       }
       this.tableConfig = this.configService.generateTableConfig(this.content);
-      this.selectedSortByCol = this.tableConfig.data[0];
     } catch (e) {
       this.jsonParseErr = e;
     }
@@ -58,8 +55,8 @@ export class TableConfigGeneratorComponent {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      if (event.container.id === 'cdk-drop-list-1' && this.selectedSortByCol && event.previousContainer.data[event.previousIndex].objectAttribute === this.selectedSortByCol.objectAttribute) {
-        this.selectedSortByCol = undefined;
+      if (event.container.id === 'cdk-drop-list-1' && event.previousContainer.data[event.previousIndex].objectAttribute === this.tableConfig.sortByAttribute) {
+        this.clearSortConfig();
       }
       transferArrayItem(event.previousContainer.data,
         event.container.data,
@@ -70,22 +67,29 @@ export class TableConfigGeneratorComponent {
     this.tableConfig = JSON.parse(JSON.stringify(this.tableConfig));
   }
 
-  setSortByColumn(event): void {
-    this.tableConfig.sortByColumn = event ? event.objectAttribute : '';
-    this.selectedSortByCol = event;
-    this.content = JSON.parse(JSON.stringify(this.content));
+  sortDisabled(enabled: boolean) {
+    this.tableConfig.sorting = enabled;
+    if (!enabled) {
+      this.clearSortConfig();
+    }
   }
 
-  setSortDirection(event): void {
-    this.tableConfig.sortDir = event as SortDirection;
-    this.content = JSON.parse(JSON.stringify(this.content));
+  sortChangeEvent($event: MatSort) {
+    if ($event.direction) {
+      this.tableConfig.sortByAttribute = $event.active;
+      this.tableConfig.sortDir = $event.direction;
+    } else {
+      this.clearSortConfig();
+    }
+  }
+
+  clearSortConfig() {
+    this.tableConfig.sortByAttribute = '';
+    this.tableConfig.sortDir = '';
   }
 
   setColumnTitle(data: TableData, event): void {
     data.columnTitle = event.target.value;
-    if (this.selectedSortByCol.objectAttribute === data.objectAttribute) {
-      this.selectedSortByCol = JSON.parse(JSON.stringify(data));
-    }
   }
 
   showCopiedToClipboardMsg(): void {

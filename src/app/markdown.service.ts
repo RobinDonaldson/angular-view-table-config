@@ -31,19 +31,23 @@ export class MarkdownService {
   getTableConfig(tableConfig: TableConfig): string {
     return ' config: TableConfig = {\n' +
     '  data: [\n' + this.mapTableData(tableConfig) +
+    '  search: ' + tableConfig.search + ',\n' +
     '  rowHover: ' + tableConfig.rowHover + ',\n' +
-    '  sortByColumn: \'' + tableConfig.sortByColumn + '\',\n' +
+    '  sorting: ' + tableConfig.sorting + ',\n' +
+    '  sortByAttribute: \'' + tableConfig.sortByAttribute + '\',\n' +
     '  sortDir: \'' + tableConfig.sortDir + '\',\n' +
     '  idTag: \'' + tableConfig.idTag + '\',\n' +
     '  locale: \'' + tableConfig.locale + '\'\n' +
     ' };\n';
   }
 
+
   mapTableData(tableConfig: TableConfig): string {
     return tableConfig.data.map(data => {
       let colInfo = '     {columnTitle: \'' + data.columnTitle + '\', objectAttribute: \'' + data.objectAttribute + '\'';
       colInfo += (data.displayAsColour ? ', displayAsColour: ' + data.displayAsColour : '');
       colInfo += (data.displayAsIcon ? ', displayAsIcon: ' + data.displayAsIcon : '');
+      colInfo += (data.dateFormat ? ', dateFormat: \'' + data.dateFormat + '\'' : '');
       return colInfo + '}';
     }).join(', \n') + '\n  ],\n';
   }
